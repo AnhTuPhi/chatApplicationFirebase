@@ -7,7 +7,7 @@ import { FlatList } from 'react-native-gesture-handler';
 export default class ChatScreen extends React.Component{
     static navigationOptions = ({ navigation }) =>{
         return {
-            title: navigation.getParam('username', null)
+            headerTitle : navigation.getParam('username', null)
         }
     }
     state = {
@@ -38,6 +38,16 @@ export default class ChatScreen extends React.Component{
     handleChange = key => val => {
         this.setState({ [key]: val })
     }
+    convertTime = (time) =>{
+        let d = new Date(time);
+        let c = new Date();
+        let result = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':';
+        result+= (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+        if(c.getDay() != d.getDay()){
+            result = d.getDay() + '' + d.getMonth() + '' + result;
+        }
+        return result;
+    }
     sendMessage = async () => {
         if (this.state.textMessage.length > 0) {
             let msgId = firebase.database().ref('messages').child(User.phone).child(this.state.person.phone).push().key;
@@ -46,7 +56,7 @@ export default class ChatScreen extends React.Component{
             };
             let messages = {
                 message: this.state.textMessage,
-                times: firebase.database.ServerValue.TIMESTAMP,
+                time: firebase.database.ServerValue.TIMESTAMP,
                 from: User.phone
             }
             updates['messages/' + User.phone + '/' + this.state.person.phone + '/' + msgId] = messages;
@@ -69,7 +79,7 @@ export default class ChatScreen extends React.Component{
                     {item.message}
                 </Text>
                 <Text style={{ padding: 3, color: '#eee', fontSize: 12 }}>
-                    {item.times}
+                    {this.convertTime(item.time)}
                 </Text>
             </View>
         )
@@ -84,14 +94,14 @@ export default class ChatScreen extends React.Component{
                     renderItem={this.renderRow}
                     keyExtractor={(item, index) => index.toString()}
                 />
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' , marginHorizontal:10}}>
                     <TextInput
                         placeholder="Type Messages ....."
                         style={styles.input}
                         value={this.state.textMessage}
                         onChangeText={this.handleChange('textMessage')}
                     />
-                    <TouchableOpacity onPress={this.sendMessage}>
+                    <TouchableOpacity onPress={this.sendMessage} style={{paddingBottom:10,marginLeft:5}}>
                         <Text style={styles.btnText}>Send</Text>
                     </TouchableOpacity>
                 </View>

@@ -5,7 +5,7 @@ import styles from '../constant/style';
 import firebase from 'firebase';
 export default class LoginScreen extends React.Component{
     static navigationOptions = {
-        header:null
+      headerTitle :'Login'
     }
   state = {
     phone : '',
@@ -26,8 +26,8 @@ export default class LoginScreen extends React.Component{
       //save user date
       await AsyncStorage.setItem('userPhone', this.state.phone);
       User.phone = this.state.phone;
-      /*await AsyncStorage.setItem('userName', this.state.username);
-      User.name = this.state.username;*/
+      await AsyncStorage.setItem('userName', this.state.username);
+      User.name = this.state.username;
       firebase.database().ref('users/' + User.phone).set({username: this.state.username});
       this.props.navigation.navigate('App');
     }

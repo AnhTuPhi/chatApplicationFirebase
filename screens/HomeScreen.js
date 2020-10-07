@@ -1,11 +1,18 @@
 import React from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, AsyncStorage, FlatList } from 'react-native';
+import { SafeAreaView, View, Text, TouchableOpacity, AsyncStorage, FlatList , Image} from 'react-native';
 import User from '../User';
 import styles from '../constant/style';
 import firebase from 'firebase';
 export default class HomeScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Chats'
+    static navigationOptions = ({ navigation}) => {
+        return{
+            title : 'Chats',
+            headerRight:(
+                <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                    <Image source={require('../images/profile.png')} style={{width:32,height:32}}/>
+                </TouchableOpacity>
+            )
+        }
     }
     state = {
         users: []
@@ -49,11 +56,11 @@ export default class HomeScreen extends React.Component {
                     keyExtractor={(item) => item.phone}
                 />
                 <Text>{User.phone}</Text>
-                <Text>{User.username}</Text>
+                <Text>{User.name}</Text>
                 <TouchableOpacity
                 onPress={this._logOut}>
-                <Text>_logOut</Text>
-            </TouchableOpacity>
+                <Text>__logOut__</Text>
+                </TouchableOpacity>
             </SafeAreaView>
         )
     }

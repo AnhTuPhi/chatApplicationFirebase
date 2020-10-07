@@ -21,7 +21,7 @@ export default class AuthLoadingScreen extends React.Component {
             measurementId: "G-9MT7Z85D9J"
         };
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        //firebase.initializeApp(firebaseConfig);
     }
     _bootstrapAsync = async () =>{
         User.phone = await AsyncStorage.getItem('userPhone');
