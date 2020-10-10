@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Alert, AsyncStorage, TouchableOpacity, TextInput,Button, View} from 'react-native';
+import {Text, Alert, AsyncStorage, TouchableOpacity, TextInput,View, Image} from 'react-native';
 import User from '../User';
 import styles from '../constant/style';
 import firebase from 'firebase';
@@ -35,6 +35,7 @@ export default class LoginScreen extends React.Component{
   render(){
     return(
       <View style={styles.container}>
+        <Image source={require('../images/login.png')} style={{width:128,height:128,marginBottom:20}}/>
         <TextInput placeholder="Phone Number"
         keyboardType = "number-pad"
         style ={styles.input}

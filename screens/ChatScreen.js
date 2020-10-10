@@ -1,9 +1,10 @@
 import React from 'react';
-import { SafeAreaView, View, TouchableOpacity, TextInput, Text, Dimensions } from 'react-native';
+import { SafeAreaView, View, TouchableOpacity, TextInput, Text, Dimensions, Image} from 'react-native';
 import styles from '../constant/style';
 import User from '../User';
 import firebase from 'firebase';
 import { FlatList } from 'react-native-gesture-handler';
+
 export default class ChatScreen extends React.Component{
     static navigationOptions = ({ navigation }) =>{
         return {
@@ -23,9 +24,9 @@ export default class ChatScreen extends React.Component{
             textMessage: '',
             messageList: []
         }
-
     }
     componentWillMount(){
+        
         firebase.database().ref('messages').child(User.phone).child(this.state.person.phone).on('child_added',
          (value) =>
             this.setState((prevState) =>{
@@ -71,7 +72,7 @@ export default class ChatScreen extends React.Component{
                 style={{
                     flexDirection: 'row', width: '60%',
                     alignSelf: item.from === User.phone ? 'flex-end' : 'flex-start',
-                    backgroundColor: item.from === User.phone ? '#00897b' : '#7cb342',
+                    backgroundColor: item.from === User.phone ? '#f4a460' : '#ffb6c1',
                     borderRadius: 5,
                     marginBottom: 8
                 }}>
@@ -89,7 +90,7 @@ export default class ChatScreen extends React.Component{
         return (
             <SafeAreaView>
                 <FlatList
-                    style={{ padding: 10 , height:height * 0.8}}
+                style={{ padding: 10 , height:height * 0.8}}
                     data={this.state.messageList}
                     renderItem={this.renderRow}
                     keyExtractor={(item, index) => index.toString()}
@@ -101,8 +102,8 @@ export default class ChatScreen extends React.Component{
                         value={this.state.textMessage}
                         onChangeText={this.handleChange('textMessage')}
                     />
-                    <TouchableOpacity onPress={this.sendMessage} style={{paddingBottom:10,marginLeft:5}}>
-                        <Text style={styles.btnText}>Send</Text>
+                    <TouchableOpacity onPress={this.sendMessage} style={{alignItems:'center', marginBottom:10,marginLeft:10, height:40, width:40, paddingTop:10, paddingLeft:5, backgroundColor:'#2196F3', borderRadius:20}}>
+                        <Image source={require('../images/paper-plane.png')} style={{tintColor:'white',height:25, resizeMode:'contain',marginRight:10}}/>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>

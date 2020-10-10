@@ -18,6 +18,14 @@ const styles = StyleSheet.create({
     btnText:{
       color: 'darkblue',
       fontSize:20
+    },
+    btn:{
+      fontSize:18,
+      color:'white',
+      backgroundColor:'black',
+      padding:5,
+      margin:5,
+      borderRadius:5
     }
   })
 export default styles;

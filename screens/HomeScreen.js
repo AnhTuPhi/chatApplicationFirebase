@@ -1,7 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, AsyncStorage, FlatList , Image} from 'react-native';
 import User from '../User';
-import styles from '../constant/style';
 import firebase from 'firebase';
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation}) => {
@@ -34,10 +33,6 @@ export default class HomeScreen extends React.Component {
             }
         })
     }
-    _logOut = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate('Auth');
-    }
     renderRow = ({ item }) => {
         return (
             <TouchableOpacity
@@ -55,12 +50,6 @@ export default class HomeScreen extends React.Component {
                     renderItem={this.renderRow}
                     keyExtractor={(item) => item.phone}
                 />
-                <Text>{User.phone}</Text>
-                <Text>{User.name}</Text>
-                <TouchableOpacity
-                onPress={this._logOut}>
-                <Text>__logOut__</Text>
-                </TouchableOpacity>
             </SafeAreaView>
         )
     }
