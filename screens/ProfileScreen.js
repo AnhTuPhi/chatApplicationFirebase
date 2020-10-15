@@ -1,16 +1,17 @@
 import React from 'react';
-import {SafeAreaView,Text, TextInput,TouchableOpacity,Alert, Image, AsyncStorage,Button} from 'react-native';
+import {SafeAreaView,Text, TextInput,TouchableOpacity,Alert, Image, AsyncStorage,Button, View} from 'react-native';
 import User from '../User';
 import styles from '../constant/style';
 import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import firebase from 'firebase';
-import Permissions  from 'expo-permissions';
 export default class ProfileScreen extends React.Component{
     static navigationOptions = {
       headerTitle :'Profile'
     }
     state = {
-        name :User.name
+        name :User.name,
+        iimage: null
     }
     handleChange = key => val=>{
         this.setState({[key]:val})
@@ -29,8 +30,34 @@ export default class ProfileScreen extends React.Component{
         await AsyncStorage.clear();
         this.props.navigation.navigate('Auth');
     }
+    componentDidMount() {
+        this.getPermissionAsync();
+        console.log('hi');
+    }
     
-    onChooseImagePress = async() =>{
+    getPermissionAsync = async () => {
+        if (Constants.platform.ios) {
+          const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+          if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+          }
+        }
+    }
+    
+      _pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1
+        });
+    
+        console.log(result);
+    
+        if (!result.cancelled) {
+          this.setState({ image: result.uri });
+        }}
+    /*onChooseImagePress = async() =>{
         let result = await ImagePicker.launchCameraAsync();
         if(!result.cancelled){
             this.upLoadImage(result.uri, "test")
@@ -45,13 +72,20 @@ export default class ProfileScreen extends React.Component{
         const blob = await respon.blob();
         var ref = firebase.storage().ref().child("images/" + imageName);
         return ref.put(blob);
-    }
+    }*/
+    
     render(){
+        let { image } = this.state;
         return(
             <SafeAreaView style={styles.container}>
-                <Image source={require('../images/personal-card.png')} style={{width:126,height:126}}/>
-                <Button title="Choose Image" onPress={this.onChooseImagePress}/>
-                <Image source={this.state.profileImageUrl} style={{width:128,height:128}} />
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    {image &&
+                    <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                    <Button
+                        title="Update avatar"
+                        onPress={this._pickImage}
+                    />
+                </View>
                 <Text style={{fontSize:20}}>Userphone : {User.phone}</Text>
                 <Text style={{fontSize:20}}>Username : {User.name}</Text>
                 <TextInput style={styles.input}
