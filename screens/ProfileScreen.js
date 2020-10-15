@@ -11,7 +11,8 @@ export default class ProfileScreen extends React.Component{
     }
     state = {
         name :User.name,
-        iimage: null
+        image: null,
+        imageSource: ''
     }
     handleChange = key => val=>{
         this.setState({[key]:val})
@@ -56,35 +57,30 @@ export default class ProfileScreen extends React.Component{
     
         if (!result.cancelled) {
           this.setState({ image: result.uri });
-        }}
-    /*onChooseImagePress = async() =>{
-        let result = await ImagePicker.launchCameraAsync();
-        if(!result.cancelled){
-            this.upLoadImage(result.uri, "test")
+          this.upLoadImage(result.uri, "test")
             this.getDownloadURL(result.uri, "test")
             .then((url) =>{
-                this.setState({profileImageUrl: url});
+                this.setState({imageSource: url});
             })
-            }
-    }
-    upLoadImage = async(uri, imageName) =>{
-        const respon = await fetch(uri);
-        const blob = await respon.blob();
-        var ref = firebase.storage().ref().child("images/" + imageName);
-        return ref.put(blob);
-    }*/
-    
+        }}
+        upLoadImage = async(uri, imageName) =>{
+            const respon = await fetch(uri);
+            const blob = await respon.blob();
+            var ref = firebase.storage().ref().child("images/" + imageName);
+            return ref.put(blob);
+        }
     render(){
         let { image } = this.state;
         return(
             <SafeAreaView style={styles.container}>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{  alignItems: 'center', justifyContent: 'center' }}>
                     {image &&
-                    <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-                    <Button
-                        title="Update avatar"
-                        onPress={this._pickImage}
-                    />
+                    <Image source={{ uri: image }} style={{ width: 200, height: 200, borderRadius:100 }} />}
+                    <TouchableOpacity onPress={this._pickImage}>
+                    <Text
+                        style={styles.btn}
+                    >Update avatar</Text>
+                    </TouchableOpacity>
                 </View>
                 <Text style={{fontSize:20}}>Userphone : {User.phone}</Text>
                 <Text style={{fontSize:20}}>Username : {User.name}</Text>
